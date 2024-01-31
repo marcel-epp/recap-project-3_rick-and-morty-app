@@ -60,11 +60,22 @@ async function fetchCharacters(url) {
   }
 }
 
-async function renderCards() {
-  results = await fetchCharacters(getAllCharactersUrl);
+async function renderCards(url) {
+  console.log("render", url);
+  cardContainer.innerHTML = "";
+  results = await fetchCharacters(url);
   results.forEach((character) => {
     cardContainer.append(CharacterCard(character));
   });
 }
 
-renderCards();
+renderCards(getAllCharactersUrl);
+
+//Search
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const query = searchBar.query.value.toLowerCase();
+  const searchUrl = `${getAllCharactersUrl}/?name=${query}`;
+  console.log(searchUrl);
+  renderCards(searchUrl);
+});
