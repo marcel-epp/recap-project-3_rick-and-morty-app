@@ -52,8 +52,12 @@ async function fetchCharacters(url) {
     console.log("Network error");
     return null;
   }
-  const data = await response.json();
-  return data.results;
+  try {
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.log("Parsing error", error);
+  }
 }
 
 async function renderCards() {
