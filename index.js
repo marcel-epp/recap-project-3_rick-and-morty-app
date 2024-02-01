@@ -13,9 +13,9 @@ const pagination = document.querySelector('[data-js="pagination"]');
 const getAllCharactersUrl = "https://rickandmortyapi.com/api/character";
 
 // States
-const maxPage = 1;
-const page = 1;
-const searchQuery = "";
+let maxPage = 1;
+let page = 1;
+let searchQuery = "";
 
 // simulate data
 let results = {
@@ -54,6 +54,8 @@ async function fetchCharacters(url) {
   }
   try {
     const data = await response.json();
+    maxPage = data.info.pages;
+    // console.log(maxPage);
     return data.results;
   } catch (error) {
     console.log("Parsing error", error);
@@ -64,9 +66,16 @@ async function renderCards(url) {
   console.log("render", url);
   cardContainer.innerHTML = "";
   results = await fetchCharacters(url);
+  if (!results) {
+    cardContainer.innerHTML = `<img src="https://i.giphy.com/g7GKcSzwQfugw.webp">
+  `;
+    pagination.textContent = `RICKED!!`;
+    return;
+  }
   results.forEach((character) => {
     cardContainer.append(CharacterCard(character));
   });
+  pagination.textContent = `${page}/${maxPage}`;
 }
 
 renderCards(getAllCharactersUrl);
@@ -74,8 +83,31 @@ renderCards(getAllCharactersUrl);
 //Search
 searchBar.addEventListener("submit", (event) => {
   event.preventDefault();
-  const query = searchBar.query.value.toLowerCase();
-  const searchUrl = `${getAllCharactersUrl}/?name=${query}`;
+  searchQuery = searchBar.query.value.toLowerCase();
+  const searchUrl = `${getAllCharactersUrl}/?name=${searchQuery}`;
   console.log(searchUrl);
   renderCards(searchUrl);
+});
+
+// pagination
+prevButton.addEventListener(`click`, () => {
+  if (page === 1) {
+    page = maxPage;
+  } else {
+    page--;
+  }
+  console.log(page);
+  const queryAttribute = searchQuery ? `&name=${searchQuery}` : ``;
+
+  renderCards(`${getAllCharactersUrl}/?page=${page}${queryAttribute}`);
+});
+nextButton.addEventListener(`click`, () => {
+  if (page === maxPage) {
+    page = 1;
+  } else {
+    page++;
+  }
+  const queryAttribute = searchQuery ? `&name=${searchQuery}` : ``;
+  console.log(page);
+  renderCards(`${getAllCharactersUrl}/?page=${page}${queryAttribute}`);
 });
