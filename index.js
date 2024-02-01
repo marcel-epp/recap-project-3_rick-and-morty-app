@@ -1,19 +1,27 @@
 import CharacterCard from "./components/CharacterCard/CharacterCard.js";
 import NavButton from "./components/NavButton/NavButton.js";
 import NavPagination from "./components/NavPagination/NavPagination.js";
+import SearchBar from "./components/SearchBar/SearchBar.js";
 // import SearchBar from "./components/SearchBar/SearchBar.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
 );
-const searchBar = document.querySelector('[data-js="search-bar"]');
+const searchBar = SearchBar();
 const navigation = document.querySelector('[data-js="navigation"]');
-const prevButton = NavButton("previous", "button,button--prev", "button-prev");
-const nextButton = NavButton("next", "button,button--next", "button-next");
+const prevButton = NavButton(
+  "previous",
+  ["button", "button--prev"],
+  "button-prev"
+);
+const nextButton = NavButton("next", ["button", "button--next"], "button-next");
 const pagination = NavPagination();
 
+searchBarContainer.append(searchBar);
+navigation.append(prevButton);
 navigation.append(pagination);
+navigation.append(nextButton);
 
 const getAllCharactersUrl = "https://rickandmortyapi.com/api/character";
 
