@@ -63,7 +63,6 @@ async function fetchCharacters(url) {
 }
 
 async function renderCards(url) {
-  console.log("render", url);
   cardContainer.innerHTML = "";
   results = await fetchCharacters(url);
   if (!results) {
@@ -85,7 +84,7 @@ searchBar.addEventListener("submit", (event) => {
   event.preventDefault();
   searchQuery = searchBar.query.value.toLowerCase();
   const searchUrl = `${getAllCharactersUrl}/?name=${searchQuery}`;
-  console.log(searchUrl);
+  page = 1;
   renderCards(searchUrl);
 });
 
@@ -96,7 +95,6 @@ prevButton.addEventListener(`click`, () => {
   } else {
     page--;
   }
-  console.log(page);
   const queryAttribute = searchQuery ? `&name=${searchQuery}` : ``;
 
   renderCards(`${getAllCharactersUrl}/?page=${page}${queryAttribute}`);
@@ -108,6 +106,5 @@ nextButton.addEventListener(`click`, () => {
     page++;
   }
   const queryAttribute = searchQuery ? `&name=${searchQuery}` : ``;
-  console.log(page);
   renderCards(`${getAllCharactersUrl}/?page=${page}${queryAttribute}`);
 });
